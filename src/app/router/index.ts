@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { testRouter } from "../modules/boilerModule/test.route";
+import { userRouter } from "../modules/User/user.route";
 
 const router = Router();
 
@@ -7,6 +8,10 @@ const routeArray = [
   {
     path: "/test",
     route: testRouter,
+  },
+  {
+    path: "/users",
+    route: userRouter,
   },
 ];
 
