@@ -9,3 +9,8 @@ export type TUser = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type Tlogin = {
+  email: string;
+  password: string;
+};
