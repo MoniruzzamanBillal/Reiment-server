@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authRouter } from "../modules/auth/auth.route";
 import { testRouter } from "../modules/boilerModule/test.route";
 import { userRouter } from "../modules/User/user.route";
 
@@ -12,6 +13,10 @@ const routeArray = [
   {
     path: "/users",
     route: userRouter,
+  },
+  {
+    path: "/auth",
+    route: authRouter,
   },
 ];
 
