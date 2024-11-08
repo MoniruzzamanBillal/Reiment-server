@@ -8,7 +8,7 @@ const getUsers = catchAsync(async (req, res) => {
   const result = await userServices.getUsersFromDb();
 
   sendResponse(res, {
-    status: httpStatus.OK,
+    statusCode: httpStatus.OK,
     success: true,
     message: "Users retrived successfully !!!",
     data: result,

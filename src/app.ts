@@ -1,5 +1,5 @@
-import express, { Application, NextFunction, Request, Response } from "express";
 import cors from "cors";
+import express, { Application, NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 
 import globalErrorHandler from "./app/middleware/globalErrorHandler";
@@ -22,11 +22,19 @@ app.get("/", async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-app.all("*", async (req: Request, res: Response) => {
-  res.status(400).json({ success: false, message: "Route not found " });
-});
-
 //! global error handler
 app.use(globalErrorHandler);
+
+// ! not found route
+app.all("*", async (req: Request, res: Response) => {
+  res.status(400).json({
+    success: false,
+    message: "Api not found ",
+    error: {
+      path: req.originalUrl,
+      message: "Your requested path is not found !!",
+    },
+  });
+});
 
 export default app;
