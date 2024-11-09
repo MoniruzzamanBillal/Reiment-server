@@ -18,5 +18,8 @@ router.post(
   productController.createProduct
 );
 
+// ! for getting single product
+router.get("/:id", productController.getSingleProducts);
+
 //
 export const productRouter = router;
