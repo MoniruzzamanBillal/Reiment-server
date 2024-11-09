@@ -4,6 +4,9 @@ import { productController } from "./product.controller";
 
 const router = Router();
 
+// ! for getting all products
+router.get("/all-products", productController.getAllProducts);
+
 // ! for creating product
 router.post(
   "/create-product",
