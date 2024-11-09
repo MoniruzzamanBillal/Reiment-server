@@ -18,12 +18,45 @@ const createProduct = z.object({
     stockQuantity: z.number().int().nonnegative({
       message: "Stock quantity must be a non-negative integer",
     }),
+  }),
+});
 
-    isDeleted: z.boolean().optional().default(false),
+// ! for updating a product
+const updateProduct = z.object({
+  body: z.object({
+    name: z.string().min(1, { message: "Product name is required" }).optional(),
+    detail: z
+      .string()
+      .min(1, { message: "Product detail is required" })
+      .optional(),
+    price: z
+      .number()
+      .positive({ message: "Product price must be a positive number" })
+      .optional(),
+    size: z
+      .array(z.string().min(1))
+      .nonempty({ message: "Product size is required" })
+      .optional(),
+    color: z
+      .array(z.string().min(1))
+      .nonempty({ message: "Product color is required" })
+      .optional(),
+    material: z
+      .string()
+      .min(1, { message: "Product material is required" })
+      .optional(),
+    stockQuantity: z
+      .number()
+      .int()
+      .nonnegative({
+        message: "Stock quantity must be a non-negative integer",
+      })
+      .optional(),
   }),
 });
 
 //
 export const productValidationSchema = {
   createProduct,
+  updateProduct,
 };

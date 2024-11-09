@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from "express";
+import validateRequest from "../../middleware/validateRequest";
 import { upload } from "../../util/SendImageCloudinary";
 import { productController } from "./product.controller";
+import { productValidationSchema } from "./product.validation";
 
 const router = Router();
 
@@ -15,11 +17,19 @@ router.post(
     req.body = JSON.parse(req.body.data);
     next();
   },
+  validateRequest(productValidationSchema.createProduct),
   productController.createProduct
 );
 
 // ! for getting single product
 router.get("/:id", productController.getSingleProducts);
+
+// ! for updating  product
+router.patch(
+  "/:id",
+  validateRequest(productValidationSchema.updateProduct),
+  productController.updateProduct
+);
 
 //
 export const productRouter = router;

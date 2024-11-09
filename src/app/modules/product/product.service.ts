@@ -40,9 +40,20 @@ const getSingleProduct = async (id: string) => {
   return result;
 };
 
+// ! for updating a product
+const updateProduct = async (payload: Partial<TProduct>, id: string) => {
+  const result = await productModel.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
+
 //
 export const productServices = {
   createProduct,
   getAllProducts,
   getSingleProduct,
+  updateProduct,
 };
