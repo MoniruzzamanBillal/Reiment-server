@@ -18,6 +18,7 @@ const productSchema = new Schema<TProduct>(
     size: {
       type: [String],
       required: [true, "product size is required "],
+      enum: ["M", "L", "XL", "XXL"],
     },
     color: {
       type: [String],

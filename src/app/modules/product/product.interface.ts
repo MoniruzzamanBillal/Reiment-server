@@ -2,7 +2,7 @@ export type TProduct = {
   name: string;
   detail: string;
   price: number;
-  size: string[];
+  size: Array<"M" | "L" | "XL" | "XXL">;
   color: string[];
   material: string;
   stockQuantity: number;
