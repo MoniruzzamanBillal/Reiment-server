@@ -50,10 +50,24 @@ const updateProduct = async (payload: Partial<TProduct>, id: string) => {
   return result;
 };
 
+// ! for deleting a product
+const deleteProduct = async (id: string) => {
+  const result = await productModel.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    {
+      new: true,
+    }
+  );
+
+  return result;
+};
+
 //
 export const productServices = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateProduct,
+  deleteProduct,
 };

@@ -31,5 +31,8 @@ router.patch(
   productController.updateProduct
 );
 
+// ! for deleting  product
+router.patch("/delete/:id", productController.deleteSingleProduct);
+
 //
 export const productRouter = router;
