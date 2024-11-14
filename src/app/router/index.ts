@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authRouter } from "../modules/auth/auth.route";
 
+import { cartRouter } from "../modules/cart/cart.route";
 import { productRouter } from "../modules/product/product.route";
 import { userRouter } from "../modules/User/user.route";
 
@@ -18,6 +19,10 @@ const routeArray = [
   {
     path: "/product",
     route: productRouter,
+  },
+  {
+    path: "/cart",
+    route: cartRouter,
   },
 ];
 
