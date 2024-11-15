@@ -107,10 +107,31 @@ const removeCartItem = async (productId: string, userId: string) => {
   return userCartData;
 };
 
+// ! for adding cart  item quantity
+const addCartItemQuantity = async (
+  payload: { productId: string; quantity: number },
+  userId: string
+) => {
+  const { productId, quantity } = payload;
+
+  const userCartData = await cartModel.findOne({ user: userId });
+
+  const productExist = await productModel.findById(productId);
+
+  if (!productExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Product don't exist !!");
+  }
+
+  if (!userCartData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User cart dont exist !!");
+  }
+};
+
 //
 export const cartServices = {
   addUpdateCart,
   getUserCart,
   addingCartItem,
   removeCartItem,
+  addCartItemQuantity,
 };

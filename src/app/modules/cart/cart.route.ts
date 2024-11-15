@@ -36,5 +36,13 @@ router.patch(
   cartController.removeCartItem
 );
 
+// ! for ading cart item quantity
+router.patch(
+  "/add-cart-item-quantity",
+  validateUser(UserRole.user),
+  validateRequest(cartValidations.addCartItemQuantity),
+  cartController.addCartItemQuantity
+);
+
 //
 export const cartRouter = router;
