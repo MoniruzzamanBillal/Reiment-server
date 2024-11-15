@@ -71,6 +71,20 @@ const addCartItemQuantity = catchAsync(async (req, res) => {
   });
 });
 
+// ! for adding cart item quantity
+const decreaseCartItemQuantity = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+
+  const result = await cartServices.decreaseCartItemQuantity(req.body, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: " Item quantity decreased successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const cartController = {
   addToCart,
@@ -78,4 +92,5 @@ export const cartController = {
   addCartItem,
   removeCartItem,
   addCartItemQuantity,
+  decreaseCartItemQuantity,
 };

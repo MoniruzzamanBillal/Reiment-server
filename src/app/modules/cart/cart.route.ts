@@ -44,5 +44,13 @@ router.patch(
   cartController.addCartItemQuantity
 );
 
+// ! for decreasing cart item quantity
+router.patch(
+  "/decrease-cart-item-quantity",
+  validateUser(UserRole.user),
+  validateRequest(cartValidations.decreaseCartItemQuantity),
+  cartController.decreaseCartItemQuantity
+);
+
 //
 export const cartRouter = router;

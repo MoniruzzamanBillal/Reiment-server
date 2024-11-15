@@ -156,6 +156,43 @@ const addCartItemQuantity = async (
   //
 };
 
+// ! for decreasing cart item quantity
+const decreaseCartItemQuantity = async (
+  payload: { productId: string; quantity: number },
+  userId: string
+) => {
+  const { productId, quantity } = payload;
+
+  const userCartData = await cartModel.findOne({ user: userId });
+
+  const productExist = await productModel.findById(productId);
+
+  if (!productExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Product don't exist !!");
+  }
+
+  if (!userCartData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User cart dont exist !!");
+  }
+
+  const productIndex = userCartData.cartItems.findIndex(
+    (item: TCartItem) => item?.product.toString() === productId
+  );
+
+  if (productIndex <= -1) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This item don't exist in your cart !!"
+    );
+  }
+
+  userCartData.cartItems[productIndex].quantity -= quantity;
+
+  await userCartData.save();
+
+  return userCartData;
+};
+
 //
 export const cartServices = {
   addUpdateCart,
@@ -163,4 +200,5 @@ export const cartServices = {
   addingCartItem,
   removeCartItem,
   addCartItemQuantity,
+  decreaseCartItemQuantity,
 };
