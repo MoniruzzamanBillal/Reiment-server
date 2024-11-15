@@ -1,12 +1,20 @@
 import { Types } from "mongoose";
 import { cartModel } from "./cart.model";
 
+// ! for getting user cart data
+const getUserCart = async (userId: string) => {
+  const result = await cartModel.find({ user: userId });
+
+  return result;
+};
+
 type ICart = {
   userId: string;
   productId: string;
   quantity: number;
   price: number;
 };
+
 // ! for creating a cart
 const addUpdateCart = async (payload: ICart) => {
   const { userId, productId, quantity, price } = payload;
@@ -44,4 +52,5 @@ const addUpdateCart = async (payload: ICart) => {
 //
 export const cartServices = {
   addUpdateCart,
+  getUserCart,
 };
