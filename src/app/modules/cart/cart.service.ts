@@ -1,4 +1,8 @@
+import httpStatus from "http-status";
 import { Types } from "mongoose";
+import AppError from "../../Error/AppError";
+import { productModel } from "../product/product.model";
+import { ICart, TCartItem } from "./cart.interface";
 import { cartModel } from "./cart.model";
 
 // ! for getting user cart data
@@ -6,13 +10,6 @@ const getUserCart = async (userId: string) => {
   const result = await cartModel.find({ user: userId });
 
   return result;
-};
-
-type ICart = {
-  userId: string;
-  productId: string;
-  quantity: number;
-  price: number;
 };
 
 // ! for creating a cart
@@ -49,8 +46,47 @@ const addUpdateCart = async (payload: ICart) => {
   }
 };
 
+// ! for adding cart item
+const addingCartItem = async (
+  payload: { productId: string; quantity: number; price: number },
+  userId: string
+) => {
+  const { productId, quantity, price } = payload;
+
+  const userCartData = await cartModel.findOne({ user: userId });
+
+  const productExist = await productModel.findById(productId);
+
+  if (!productExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Product don't exist !!");
+  }
+
+  if (!userCartData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User cart dont exist !!");
+  }
+
+  const productIndex = userCartData.cartItems.findIndex(
+    (item: TCartItem) => item?.product.toString() === productId
+  );
+
+  if (productIndex > -1) {
+    userCartData.cartItems[productIndex].quantity += quantity;
+  } else {
+    userCartData.cartItems.push({
+      product: new Types.ObjectId(productId),
+      quantity: quantity,
+      price: price,
+    });
+  }
+
+  await userCartData.save();
+
+  return userCartData;
+};
+
 //
 export const cartServices = {
   addUpdateCart,
   getUserCart,
+  addingCartItem,
 };

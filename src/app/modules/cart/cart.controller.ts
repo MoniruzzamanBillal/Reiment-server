@@ -29,8 +29,23 @@ const getUserCart = catchAsync(async (req, res) => {
   });
 });
 
+// ! for adding item in cart
+const addCartItem = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+
+  const result = await cartServices.addingCartItem(req.body, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Item added to cart successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const cartController = {
   addToCart,
   getUserCart,
+  addCartItem,
 };

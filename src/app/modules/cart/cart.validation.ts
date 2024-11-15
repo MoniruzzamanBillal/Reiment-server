@@ -9,7 +9,16 @@ const addToCart = z.object({
   }),
 });
 
+const addItemToCart = z.object({
+  body: z.object({
+    productId: z.string().min(1, "User is required"),
+    quantity: z.number().nonnegative("product quantity is required"),
+    price: z.number().nonnegative("product price is required"),
+  }),
+});
+
 //
 export const cartValidations = {
   addToCart,
+  addItemToCart,
 };

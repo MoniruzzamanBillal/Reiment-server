@@ -10,3 +10,10 @@ export type TCart = {
   user: Types.ObjectId;
   cartItems: TCartItem[];
 };
+
+export type ICart = {
+  userId: string;
+  productId: string;
+  quantity: number;
+  price: number;
+};

@@ -21,5 +21,13 @@ router.post(
   cartController.addToCart
 );
 
+// ! for adding item in cart
+router.patch(
+  "/add-cart-item",
+  validateUser(UserRole.user),
+  validateRequest(cartValidations.addItemToCart),
+  cartController.addCartItem
+);
+
 //
 export const cartRouter = router;
