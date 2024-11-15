@@ -125,6 +125,35 @@ const addCartItemQuantity = async (
   if (!userCartData) {
     throw new AppError(httpStatus.BAD_REQUEST, "User cart dont exist !!");
   }
+
+  const productIndex = userCartData.cartItems.findIndex(
+    (item: TCartItem) => item?.product.toString() === productId
+  );
+
+  if (productIndex <= -1) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This item don't exist in your cart !!"
+    );
+  }
+
+  if (
+    userCartData.cartItems[productIndex].quantity + quantity >
+    productExist?.stockQuantity
+  ) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Product stock quantity exceeds !! You can't add this product  "
+    );
+  }
+
+  userCartData.cartItems[productIndex].quantity += quantity;
+
+  await userCartData.save();
+
+  return userCartData;
+
+  //
 };
 
 //
