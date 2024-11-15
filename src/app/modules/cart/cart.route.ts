@@ -29,5 +29,12 @@ router.patch(
   cartController.addCartItem
 );
 
+// ! for removing item from cart
+router.patch(
+  "/remove-cart-item",
+  validateUser(UserRole.user),
+  cartController.removeCartItem
+);
+
 //
 export const cartRouter = router;

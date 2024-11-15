@@ -84,9 +84,33 @@ const addingCartItem = async (
   return userCartData;
 };
 
+// ! for removing cart item
+const removeCartItem = async (productId: string, userId: string) => {
+  const userCartData = await cartModel.findOne({ user: userId });
+
+  const productExist = await productModel.findById(productId);
+
+  if (!productExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Product don't exist !!");
+  }
+
+  if (!userCartData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User cart dont exist !!");
+  }
+
+  userCartData.cartItems = userCartData.cartItems?.filter(
+    (item: TCartItem) => item?.product.toString() !== productId
+  );
+
+  await userCartData.save();
+
+  return userCartData;
+};
+
 //
 export const cartServices = {
   addUpdateCart,
   getUserCart,
   addingCartItem,
+  removeCartItem,
 };

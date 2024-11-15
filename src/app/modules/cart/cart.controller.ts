@@ -43,9 +43,24 @@ const addCartItem = catchAsync(async (req, res) => {
   });
 });
 
+// ! for removing item in cart
+const removeCartItem = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+
+  const result = await cartServices.removeCartItem(req.body?.productId, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Item removed from cart successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const cartController = {
   addToCart,
   getUserCart,
   addCartItem,
+  removeCartItem,
 };
