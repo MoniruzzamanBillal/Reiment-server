@@ -4,6 +4,7 @@ import { authRouter } from "../modules/auth/auth.route";
 import { addressRouter } from "../modules/address/address.route";
 import { cartRouter } from "../modules/cart/cart.route";
 import { orderRouter } from "../modules/order/order.route";
+import { paymentRouter } from "../modules/payment/payment.route";
 import { productRouter } from "../modules/product/product.route";
 import { userRouter } from "../modules/User/user.route";
 
@@ -33,6 +34,10 @@ const routeArray = [
   {
     path: "/order",
     route: orderRouter,
+  },
+  {
+    path: "/payment",
+    route: paymentRouter,
   },
 ];
 
