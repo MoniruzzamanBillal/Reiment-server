@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TAddress } from "./address.interface";
 
-export const addressSchema = new Schema<TAddress>(
+const addressSchema = new Schema<TAddress>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -37,12 +37,12 @@ export const addressSchema = new Schema<TAddress>(
 );
 
 addressSchema.pre("find", async function (next) {
-  this.find({ isDeleted: { $ne: false } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
 addressSchema.pre("findOne", async function (next) {
-  this.find({ isDeleted: { $ne: false } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
