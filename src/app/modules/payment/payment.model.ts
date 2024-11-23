@@ -12,7 +12,6 @@ const paymentSchema = new Schema<TPayment>(
     orderId: {
       type: Schema.Types.ObjectId,
       ref: "Order",
-      required: true,
     },
     amount: {
       type: Number,

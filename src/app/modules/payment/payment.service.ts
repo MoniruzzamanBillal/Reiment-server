@@ -8,7 +8,7 @@ const verifyPayment = async (transactionId: string) => {
 
   if (verifyResult && verifyResult?.pay_status === "Successful") {
     await paymentModel.findOneAndUpdate(
-      { transactionId: transactionId },
+      { transactionId },
       {
         paymentStatus: PAYMENTSTATUS.Completed,
       },
