@@ -43,6 +43,12 @@ const productSchema = new Schema<TProduct>(
   { timestamps: true }
 );
 
+productSchema.virtual("reviews", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "productId",
+});
+
 productSchema.pre("find", async function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();

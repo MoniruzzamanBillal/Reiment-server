@@ -26,9 +26,9 @@ const validateUser = (...requiredRoles: TUserRole[]) => {
     const { userRole } = decoded;
 
     if (requiredRoles && !requiredRoles.includes(userRole)) {
-      return res.status(401).json({
+      return res.status(httpStatus.UNAUTHORIZED).json({
         success: false,
-        statusCode: 401,
+        statusCode: httpStatus.UNAUTHORIZED,
         message: "You have no access to this route",
       });
     }

@@ -7,6 +7,7 @@ import { discountRouter } from "../modules/discount/discount.route";
 import { orderRouter } from "../modules/order/order.route";
 import { paymentRouter } from "../modules/payment/payment.route";
 import { productRouter } from "../modules/product/product.route";
+import { reviewRouter } from "../modules/review/review.route";
 import { userRouter } from "../modules/User/user.route";
 
 const router = Router();
@@ -43,6 +44,10 @@ const routeArray = [
   {
     path: "/cupon",
     route: discountRouter,
+  },
+  {
+    path: "/review",
+    route: reviewRouter,
   },
 ];
 
