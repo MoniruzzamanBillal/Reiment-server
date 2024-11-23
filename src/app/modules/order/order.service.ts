@@ -1,13 +1,14 @@
 import httpStatus from "http-status";
-import { startSession } from "mongoose";
+import { startSession, Types } from "mongoose";
 import AppError from "../../Error/AppError";
+import { checkDataExist } from "../../util/CheckDataExist";
 import { addressModel } from "../address/address.model";
 import { PAYMENTSTATUS } from "../payment/payment.constant";
 import { paymentModel } from "../payment/payment.model";
 import { initiatePayment } from "../payment/payment.util";
 import { productModel } from "../product/product.model";
 import { userModel } from "../User/user.model";
-import { TDirectOrder } from "./order.interface";
+import { TDirectOrder, TOrderItem } from "./order.interface";
 import { orderModel } from "./order.model";
 import { getTotalAmount } from "./order.utilFunction";
 
@@ -16,27 +17,20 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
   const { product, quantity, price, discount, address } = payload;
 
   let totalAmount;
-  const userData = await userModel.findById(userId);
-  const userAddress = await addressModel.findById(address);
-  const productData = await productModel.findById(product);
 
-  console.log("product data = ", productData);
-  console.log(productData?.stockQuantity);
+  const userData = await checkDataExist(
+    userModel,
+    userId,
+    "This user dont exist !!"
+  );
 
-  if (!userData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "this user dont exist !!");
-  }
+  await checkDataExist(addressModel, address, "This address don't exist !!");
 
-  if (userData?.isDeleted) {
-    throw new AppError(httpStatus.BAD_REQUEST, "this user is deleted  !!");
-  }
-  if (!userAddress) {
-    throw new AppError(httpStatus.BAD_REQUEST, "this address dont exist !!");
-  }
-
-  if (!productData) {
-    throw new AppError(httpStatus.BAD_REQUEST, "this product dont exist !!");
-  }
+  const productData = await checkDataExist(
+    productModel,
+    product,
+    "This product don't exist !!"
+  );
 
   if (productData?.stockQuantity < quantity) {
     throw new AppError(
@@ -66,22 +60,21 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
   try {
     session.startTransaction();
 
-    let orderData;
+    const orderData: {
+      user: string;
+      address: Types.ObjectId;
+      orderItems: TOrderItem[];
+      totalAmount: number;
+      discount?: Types.ObjectId;
+    } = {
+      user: userId,
+      address,
+      orderItems,
+      totalAmount,
+    };
+
     if (discount) {
-      orderData = {
-        user: userId,
-        discount,
-        address,
-        orderItems,
-        totalAmount,
-      };
-    } else {
-      orderData = {
-        user: userId,
-        address,
-        orderItems,
-        totalAmount,
-      };
+      orderData.discount = discount;
     }
 
     // * creating order
