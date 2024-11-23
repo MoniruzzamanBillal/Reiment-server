@@ -12,5 +12,12 @@ router.post(
   orderController.createDirectOrderProduct
 );
 
+// ! for ordering from cart  item
+router.post(
+  "/cart-order",
+  validateUser(UserRole.user),
+  orderController.orderFromCartProduct
+);
+
 //
 export const orderRouter = router;

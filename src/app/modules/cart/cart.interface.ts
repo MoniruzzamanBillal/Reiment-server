@@ -9,6 +9,7 @@ export type TCartItem = {
 export type TCart = {
   user: Types.ObjectId;
   cartItems: TCartItem[];
+  isDeleted: boolean;
 };
 
 export type ICart = {

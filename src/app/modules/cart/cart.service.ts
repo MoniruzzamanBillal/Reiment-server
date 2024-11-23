@@ -7,7 +7,7 @@ import { cartModel } from "./cart.model";
 
 // ! for getting user cart data
 const getUserCart = async (userId: string) => {
-  const result = await cartModel.find({ user: userId });
+  const result = await cartModel.findOne({ user: userId });
 
   return result;
 };

@@ -17,7 +17,22 @@ const createDirectOrderProduct = catchAsync(async (req, res) => {
   });
 });
 
+// ! for ordering from cart
+const orderFromCartProduct = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+
+  const result = await orderServices.orderFromCart(req.body, userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Order placed successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const orderController = {
   createDirectOrderProduct,
+  orderFromCartProduct,
 };

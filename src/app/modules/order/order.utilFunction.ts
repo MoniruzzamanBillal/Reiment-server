@@ -5,8 +5,7 @@ import { discountModel } from "../discount/discount.model";
 
 export const getTotalAmount = async (
   discount: Types.ObjectId,
-  quantity: number,
-  price: number
+  total: number
 ): Promise<number> => {
   const today = new Date();
   const discountData = await discountModel.findById(discount);
@@ -21,7 +20,6 @@ export const getTotalAmount = async (
     throw new AppError(httpStatus.BAD_REQUEST, " This cupon is expired !!");
   }
 
-  const total = quantity * price;
   const discountAmount = total * (discountData?.percentage / 100);
 
   const totalAmount = total - discountAmount;

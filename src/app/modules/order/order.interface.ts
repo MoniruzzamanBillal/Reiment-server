@@ -32,3 +32,8 @@ export type TDirectOrder = {
   address: Types.ObjectId;
   discount?: Types.ObjectId;
 };
+
+export type TCartOrder = {
+  address: Types.ObjectId;
+  discount?: Types.ObjectId;
+};
