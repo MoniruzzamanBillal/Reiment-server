@@ -22,7 +22,6 @@ const verifyPayment = catchAsync(async (req, res) => {
 });
 
 // ! for cancel payment
-
 const cancelPayment = catchAsync(async (req, res) => {
   return res.redirect(`${redirectURL}`);
 });

@@ -2,7 +2,6 @@ import httpStatus from "http-status";
 import { startSession } from "mongoose";
 import AppError from "../../Error/AppError";
 import { addressModel } from "../address/address.model";
-import { discountModel } from "../discount/discount.model";
 import { PAYMENTSTATUS } from "../payment/payment.constant";
 import { paymentModel } from "../payment/payment.model";
 import { initiatePayment } from "../payment/payment.util";
@@ -10,6 +9,7 @@ import { productModel } from "../product/product.model";
 import { userModel } from "../User/user.model";
 import { TDirectOrder } from "./order.interface";
 import { orderModel } from "./order.model";
+import { getTotalAmount } from "./order.utilFunction";
 
 // ! for ordering item
 const directOrderItem = async (payload: TDirectOrder, userId: string) => {
@@ -21,6 +21,7 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
   const productData = await productModel.findById(product);
 
   console.log("product data = ", productData);
+  console.log(productData?.stockQuantity);
 
   if (!userData) {
     throw new AppError(httpStatus.BAD_REQUEST, "this user dont exist !!");
@@ -37,24 +38,15 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "this product dont exist !!");
   }
 
+  if (productData?.stockQuantity < quantity) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Product stock quantity exceeds !! You can't order this product  "
+    );
+  }
+
   if (discount) {
-    const today = new Date();
-    const discountData = await discountModel.findById(discount);
-
-    if (!discountData) {
-      throw new AppError(httpStatus.BAD_REQUEST, "this cupon doesn't exist !!");
-    }
-    const expireDate = new Date(discountData?.expiryDate as string);
-
-    if (expireDate <= today) {
-      throw new AppError(httpStatus.BAD_REQUEST, " This cupon is expired !!");
-    }
-
-    const total = quantity * price;
-
-    const discountAmount = total * (discountData?.percentage / 100);
-
-    totalAmount = total - discountAmount;
+    totalAmount = await getTotalAmount(discount, quantity, price);
   } else {
     totalAmount = quantity * price;
   }
@@ -99,7 +91,7 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
     const paymentData = {
       userId: userId,
       orderId: newOrder[0]?._id,
-      amount: totalAmount,
+      amount: totalAmount as number,
       transactionId: trxnNumber,
       paymentStatus: PAYMENTSTATUS.Pending,
     };
@@ -116,10 +108,17 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
       { session }
     );
 
+    // * reducing product stock quantity
+    await productModel.findByIdAndUpdate(
+      product,
+      { $inc: { stockQuantity: -quantity } },
+      { new: true, session }
+    );
+
     // * initiate payment
     const tracsactionData = {
       transactionId: trxnNumber,
-      amount: totalAmount,
+      amount: totalAmount as number,
       customerName: userData?.name,
       customerEmail: userData?.email,
       userId: userId,
@@ -138,6 +137,7 @@ const directOrderItem = async (payload: TDirectOrder, userId: string) => {
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
+    console.error("Error during order transaction:", error);
 
     throw new Error("Failed to order item !!");
   }
