@@ -17,8 +17,18 @@ export type Toder = {
   user: Types.ObjectId;
   address: Types.ObjectId;
   totalAmount: number;
+  isDeleted: boolean;
   orderStatus: keyof typeof orderStatus;
   orderItems: TOrderItem[];
   delivery: Tdelivery;
-  discounts: Types.ObjectId;
+  discount: Types.ObjectId;
+  payment: Types.ObjectId;
+};
+
+export type TDirectOrder = {
+  product: Types.ObjectId;
+  quantity: number;
+  price: number;
+  address: Types.ObjectId;
+  discount?: Types.ObjectId;
 };

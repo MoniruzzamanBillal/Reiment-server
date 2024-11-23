@@ -1,29 +1,66 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
+import { Toder, TOrderItem } from "./order.interface";
 
-const addressSchema = new Schema({
-  user: {
+const orderItemSchema = new Schema<TOrderItem>({
+  product: {
     type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+    ref: "Product",
+    required: [true, "Product is required !!"],
   },
-  street: {
-    type: String,
-    required: true,
+  quantity: {
+    type: Number,
+    required: [true, "Product quantity is required !!"],
+    min: 1,
   },
-  city: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-  },
-  country: {
-    type: String,
-    required: true,
+  price: {
+    type: Number,
+    required: [true, "Product price is required !!"],
   },
 });
+
+const orderSchema = new Schema<Toder>(
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    discount: {
+      type: Schema.Types.ObjectId,
+      ref: "Discount",
+    },
+    address: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+      required: true,
+    },
+    payment: {
+      type: Schema.Types.ObjectId,
+      ref: "Payment",
+    },
+    orderItems: [orderItemSchema],
+    totalAmount: {
+      type: Number,
+      required: [true, "Total order amount is required !!"],
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true }
+);
+
+//
+orderSchema.pre("find", async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+orderSchema.pre("findOne", async function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+//
+export const orderModel = model<Toder>("Order", orderSchema);
