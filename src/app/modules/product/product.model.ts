@@ -32,8 +32,8 @@ const productSchema = new Schema<TProduct>(
       type: Number,
       required: [true, "product stock quantity is required "],
     },
-    productImages: {
-      type: [String],
+    productImage: {
+      type: String,
     },
     isDeleted: {
       type: Boolean,

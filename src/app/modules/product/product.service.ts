@@ -1,27 +1,52 @@
+import httpStatus from "http-status";
+import AppError from "../../Error/AppError";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { TProduct } from "./product.interface";
 import { productModel } from "./product.model";
 
 // ! for creating a product
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createProduct = async (payload: TProduct, files: any) => {
-  const imageUrls = await Promise.all(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    files?.map(async (file: any) => {
-      const name = file?.originalname;
-      const path = file?.path;
+const createProduct = async (payload: TProduct, file: any) => {
+  const name = file?.originalname?.trim();
+  const path = file?.path;
 
-      const imgUrlResult = await SendImageCloudinary(path, name as string);
+  const imgUrlResult = await SendImageCloudinary(path, name as string);
 
-      const imgUrl = imgUrlResult?.secure_url;
-
-      return imgUrl;
-    })
-  );
+  const imgUrl = imgUrlResult?.secure_url;
 
   const result = await productModel.create({
     ...payload,
-    productImages: imageUrls,
+    productImage: imgUrl,
+  });
+
+  return result;
+};
+
+// ! for updating a product
+const updateProduct = async (
+  payload: Partial<TProduct>,
+  file: any,
+  id: string
+) => {
+  const productData = await productModel.findById(id);
+
+  if (!productData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Product not found !!!");
+  }
+
+  if (file) {
+    const name = file?.originalname?.trim();
+    const path = file?.path;
+    const imgUrlResult = await SendImageCloudinary(path, name as string);
+
+    const imgUrl = imgUrlResult?.secure_url;
+
+    payload.productImage = imgUrl;
+  }
+
+  const result = await productModel.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
   });
 
   return result;
@@ -37,16 +62,6 @@ const getAllProducts = async () => {
 // ! for getting specific product
 const getSingleProduct = async (id: string) => {
   const result = await productModel.findById(id);
-  return result;
-};
-
-// ! for updating a product
-const updateProduct = async (payload: Partial<TProduct>, id: string) => {
-  const result = await productModel.findByIdAndUpdate(id, payload, {
-    new: true,
-    runValidators: true,
-  });
-
   return result;
 };
 

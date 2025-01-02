@@ -6,6 +6,6 @@ export type TProduct = {
   color: string[];
   material: string;
   stockQuantity: number;
-  productImages?: string[];
+  productImage?: string;
   isDeleted: boolean;
 };

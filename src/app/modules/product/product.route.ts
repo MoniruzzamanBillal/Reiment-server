@@ -12,7 +12,7 @@ router.get("/all-products", productController.getAllProducts);
 // ! for creating product
 router.post(
   "/create-product",
-  upload.array("images", 10),
+  upload.single("prodImg"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
     next();
@@ -27,6 +27,11 @@ router.get("/:id", productController.getSingleProducts);
 // ! for updating  product
 router.patch(
   "/:id",
+  upload.single("prodImg"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(productValidationSchema.updateProduct),
   productController.updateProduct
 );

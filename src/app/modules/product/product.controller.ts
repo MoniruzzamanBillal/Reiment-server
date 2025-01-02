@@ -5,12 +5,28 @@ import { productServices } from "./product.service";
 
 // ! for creating product
 const createProduct = catchAsync(async (req, res) => {
-  const result = await productServices.createProduct(req.body, req.files);
+  const result = await productServices.createProduct(req.body, req.file);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product created successfully !!!",
+    data: result,
+  });
+});
+
+// ! for updating a product
+const updateProduct = catchAsync(async (req, res) => {
+  const result = await productServices.updateProduct(
+    req.body,
+    req.file,
+    req.params?.id
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Product updated successfully !!!",
     data: result,
   });
 });
@@ -35,18 +51,6 @@ const getSingleProducts = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product retrived successfully !!!",
-    data: result,
-  });
-});
-
-// ! for updating a product
-const updateProduct = catchAsync(async (req, res) => {
-  const result = await productServices.updateProduct(req.body, req.params?.id);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Product updated successfully !!!",
     data: result,
   });
 });
