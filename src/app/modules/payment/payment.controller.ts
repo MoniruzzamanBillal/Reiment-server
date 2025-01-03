@@ -1,7 +1,7 @@
 import catchAsync from "../../util/catchAsync";
 import { paymentServices } from "./payment.service";
 
-const redirectURL = "http://localhost:3000";
+const redirectURL = "http://localhost:5173";
 // const redirectURL = "https://techwisdom.vercel.app";
 
 // ! for verify payment

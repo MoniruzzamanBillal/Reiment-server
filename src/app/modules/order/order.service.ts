@@ -9,6 +9,7 @@ import { paymentModel } from "../payment/payment.model";
 import { initiatePayment } from "../payment/payment.util";
 import { productModel } from "../product/product.model";
 import { userModel } from "../User/user.model";
+import { orderStatus } from "./order.constant";
 import { TCartOrder, TDirectOrder, TOrderItem } from "./order.interface";
 import { orderModel } from "./order.model";
 import { getTotalAmount } from "./order.utilFunction";
@@ -279,8 +280,86 @@ const orderFromCart = async (payload: TCartOrder, userId: string) => {
   }
 };
 
+// ! for approving order
+const approveOrder = async (id: string) => {
+  const orderData = await orderModel.findById(id);
+
+  if (!orderData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid order data !! ");
+  }
+
+  const modifiedData = await orderModel.findByIdAndUpdate(
+    id,
+    { status: orderStatus.approved },
+    { new: true, runValidators: true }
+  );
+
+  return modifiedData;
+};
+
+// ! for canceling order
+const cancelOrder = async (id: string) => {
+  const orderData = await orderModel.findById(id);
+
+  if (!orderData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid order data !! ");
+  }
+
+  console.log(orderData?.status);
+
+  console.log(orderData?.orderItems);
+
+  const session = await startSession();
+  try {
+    session.startTransaction();
+
+    const modifiedData = await orderModel.findByIdAndUpdate(
+      id,
+      { status: orderStatus.canceled },
+      { new: true, runValidators: true, session }
+    );
+
+    for (const orderItem of orderData?.orderItems || []) {
+      await productModel.findByIdAndUpdate(
+        orderItem?.product,
+        {
+          $inc: { stockQuantity: orderItem?.quantity },
+        },
+        { new: true, session }
+      );
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return modifiedData;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+  }
+
+  //
+};
+
+// ! for getting all order data
+const getAllOrder = async () => {
+  const result = await orderModel.find().populate({
+    path: "address",
+    populate: {
+      path: "user",
+      select:
+        "  -password -createdAt  -updatedAt -__v  -userRole  -isDeleted -status ",
+    },
+  });
+
+  return result;
+};
+
 //
 export const orderServices = {
   directOrderItem,
   orderFromCart,
+  approveOrder,
+  getAllOrder,
+  cancelOrder,
 };

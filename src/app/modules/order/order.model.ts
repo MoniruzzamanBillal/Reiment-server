@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { orderStatus } from "./order.constant";
 import { Toder, TOrderItem } from "./order.interface";
 
 const orderItemSchema = new Schema<TOrderItem>({
@@ -39,6 +40,11 @@ const orderSchema = new Schema<Toder>(
       ref: "Payment",
     },
     orderItems: [orderItemSchema],
+    status: {
+      type: String,
+      required: true,
+      default: orderStatus.pending,
+    },
     totalAmount: {
       type: Number,
       required: [true, "Total order amount is required !!"],

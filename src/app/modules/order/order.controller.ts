@@ -13,7 +13,7 @@ const createDirectOrderProduct = catchAsync(async (req, res) => {
     statusCode: httpStatus.CREATED,
     success: true,
     message: "Order placed successfully !!!",
-    data: result,
+    data: result?.payment_url,
   });
 });
 
@@ -27,6 +27,42 @@ const orderFromCartProduct = catchAsync(async (req, res) => {
     statusCode: httpStatus.CREATED,
     success: true,
     message: "Order placed successfully !!!",
+    data: result?.payment_url,
+  });
+});
+
+// ! for getting all order data
+const getAllOrder = catchAsync(async (req, res) => {
+  const result = await orderServices.getAllOrder();
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Order data retrived  successfully !!!",
+    data: result,
+  });
+});
+
+// ! for approving order data
+const approveOrder = catchAsync(async (req, res) => {
+  const result = await orderServices.approveOrder(req.params.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order  Approved successfully ",
+    data: result,
+  });
+});
+
+//  ! for canceling order
+const cancelOrder = catchAsync(async (req, res) => {
+  const result = await orderServices.cancelOrder(req.params.id);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order Canceled successfully ",
     data: result,
   });
 });
@@ -35,4 +71,7 @@ const orderFromCartProduct = catchAsync(async (req, res) => {
 export const orderController = {
   createDirectOrderProduct,
   orderFromCartProduct,
+  getAllOrder,
+  approveOrder,
+  cancelOrder,
 };

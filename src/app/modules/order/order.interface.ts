@@ -23,6 +23,7 @@ export type Toder = {
   delivery: Tdelivery;
   discount: Types.ObjectId;
   payment: Types.ObjectId;
+  status: string;
 };
 
 export type TDirectOrder = {
