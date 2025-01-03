@@ -305,10 +305,6 @@ const cancelOrder = async (id: string) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid order data !! ");
   }
 
-  console.log(orderData?.status);
-
-  console.log(orderData?.orderItems);
-
   const session = await startSession();
   try {
     session.startTransaction();
@@ -343,17 +339,38 @@ const cancelOrder = async (id: string) => {
 
 // ! for getting all order data
 const getAllOrder = async () => {
-  const result = await orderModel.find().populate("address").populate({
-    path: "user",
-    select: " -userRole -status -createdAt -updatedAt -password -isDeleted ",
-  });
+  const result = await orderModel
+    .find()
+    .populate("address")
+    .populate({
+      path: "user",
+      select: " -userRole -status -createdAt -updatedAt -password -isDeleted ",
+    })
+    .populate({
+      path: "orderItems.product",
+      select: " -createdAt -updatedAt  -isDeleted -stockQuantity ",
+    })
+    .populate({
+      path: "payment",
+      select: " -createdAt -updatedAt -userId -orderId -__v ",
+    });
 
   return result;
 };
 
 // ! for getting single order
 const getSingleOrder = async (id: string) => {
-  const orderData = await orderModel.findById(id).populate("address user");
+  const orderData = await orderModel
+    .findById(id)
+    .populate("address user")
+    .populate({
+      path: "orderItems.product",
+      select: " -createdAt -updatedAt  -isDeleted -stockQuantity ",
+    })
+    .populate({
+      path: "payment",
+      select: " -createdAt -updatedAt -userId -orderId -__v ",
+    });
 
   if (!orderData) {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid order id !!!");
