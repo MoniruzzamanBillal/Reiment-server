@@ -343,16 +343,23 @@ const cancelOrder = async (id: string) => {
 
 // ! for getting all order data
 const getAllOrder = async () => {
-  const result = await orderModel.find().populate({
-    path: "address",
-    populate: {
-      path: "user",
-      select:
-        "  -password -createdAt  -updatedAt -__v  -userRole  -isDeleted -status ",
-    },
+  const result = await orderModel.find().populate("address").populate({
+    path: "user",
+    select: " -userRole -status -createdAt -updatedAt -password -isDeleted ",
   });
 
   return result;
+};
+
+// ! for getting single order
+const getSingleOrder = async (id: string) => {
+  const orderData = await orderModel.findById(id).populate("address user");
+
+  if (!orderData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid order id !!!");
+  }
+
+  return orderData;
 };
 
 //
@@ -362,4 +369,5 @@ export const orderServices = {
   approveOrder,
   getAllOrder,
   cancelOrder,
+  getSingleOrder,
 };

@@ -43,6 +43,18 @@ const getAllOrder = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting single order data
+const getSingleOrder = catchAsync(async (req, res) => {
+  const result = await orderServices.getSingleOrder(req.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Order data retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for approving order data
 const approveOrder = catchAsync(async (req, res) => {
   const result = await orderServices.approveOrder(req.params.id);
@@ -72,6 +84,7 @@ export const orderController = {
   createDirectOrderProduct,
   orderFromCartProduct,
   getAllOrder,
+  getSingleOrder,
   approveOrder,
   cancelOrder,
 };

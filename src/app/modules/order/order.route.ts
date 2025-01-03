@@ -22,17 +22,20 @@ router.post(
   orderController.orderFromCartProduct
 );
 
+// ! for getting single order
+router.get("/detail/:id", orderController.getSingleOrder);
+
 // ! approve order
 router.patch(
   "/approve-order/:id",
-  // validateUser(UserRole.admin),
+  validateUser(UserRole.admin),
   orderController.approveOrder
 );
 
 // ! cancel order
 router.patch(
   "/cancel-order/:id",
-  // validateUser(UserRole.admin, UserRole.user),
+  validateUser(UserRole.admin, UserRole.user),
   orderController.cancelOrder
 );
 
