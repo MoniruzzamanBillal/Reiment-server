@@ -353,7 +353,8 @@ const getAllOrder = async () => {
     .populate({
       path: "payment",
       select: " -createdAt -updatedAt -userId -orderId -__v ",
-    });
+    })
+    .sort({ status: "pending" === "pending" ? -1 : 1 });
 
   return result;
 };

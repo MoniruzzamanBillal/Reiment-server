@@ -53,8 +53,35 @@ const updateProduct = async (
 };
 
 // ! for getting all products
-const getAllProducts = async () => {
-  const result = await productModel.find();
+const getAllProducts = async (query: Record<string, unknown>) => {
+  console.log("query from all products = ", query);
+
+  const { limit, page, price, searchTerm } = query;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const params: any = {};
+
+  if (price) {
+    params.price = { $lte: parseInt(price as string) };
+  }
+
+  if (searchTerm) {
+    params.$or = [
+      { name: { $regex: new RegExp(searchTerm as string, "i") } },
+      { detail: { $regex: new RegExp(searchTerm as string, "i") } },
+    ];
+  }
+
+  console.log(params);
+
+  const limitValue = limit ? parseInt(limit as string) : 0;
+  const pageValue = page ? parseInt(page as string) : 0;
+  const skipValue = limitValue * pageValue;
+
+  const result = await productModel
+    .find(params)
+    .limit(limitValue)
+    .skip(limitValue && pageValue ? skipValue : 0);
 
   return result;
 };
