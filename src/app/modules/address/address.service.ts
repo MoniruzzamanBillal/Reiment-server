@@ -1,8 +1,18 @@
+import httpStatus from "http-status";
+import AppError from "../../Error/AppError";
 import { TAddress } from "./address.interface";
 import { addressModel } from "./address.model";
 
 // ! for creating address
 const addAddress = async (payload: TAddress) => {
+  const haveAddress = await addressModel.find({ user: payload?.user });
+
+  if (haveAddress?.length) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "This user already have an address !!!"
+    );
+  }
   const result = await addressModel.create(payload);
 
   return result;

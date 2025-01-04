@@ -7,7 +7,11 @@ import { cartModel } from "./cart.model";
 
 // ! for getting user cart data
 const getUserCart = async (userId: string) => {
-  const result = await cartModel.findOne({ user: userId });
+  const result = await cartModel.findOne({ user: userId }).populate({
+    path: "cartItems.product",
+    select:
+      " -detail -size -color -material -isDeleted -createdAt -updatedAt -updatedAt -__v ",
+  });
 
   return result;
 };

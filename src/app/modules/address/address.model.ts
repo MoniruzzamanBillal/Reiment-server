@@ -7,16 +7,17 @@ const addressSchema = new Schema<TAddress>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: [true, "User is required !!"],
+      unique: true,
     },
     street: {
       type: String,
       required: [true, "Street is required"],
     },
-    city: {
+    district: {
       type: String,
       required: [true, "City is required"],
     },
-    state: {
+    division: {
       type: String,
       required: [true, "State is required"],
     },
@@ -24,10 +25,7 @@ const addressSchema = new Schema<TAddress>(
       type: String,
       required: [true, "Postal code is required"],
     },
-    country: {
-      type: String,
-      required: [true, "Country is required"],
-    },
+
     isDeleted: {
       type: Boolean,
       default: false,

@@ -21,6 +21,9 @@ router.post(
   productController.createProduct
 );
 
+// ! for getting all recent
+router.patch("/recent-products", productController.getRecentProducts);
+
 // ! for getting single product
 router.get("/:id", productController.getSingleProducts);
 

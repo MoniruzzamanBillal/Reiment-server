@@ -15,7 +15,37 @@ const getUsers = catchAsync(async (req, res) => {
   });
 });
 
+// ! get logged in user
+const getLoggedInUser = catchAsync(async (req, res) => {
+  const result = await userServices.getLoggedInUser(req.user?.userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "User Retrived successfully!!!",
+    data: result,
+  });
+});
+
+// ! for updating a user
+const updateUser = catchAsync(async (req, res) => {
+  const result = await userServices.updateUser(
+    req.body,
+    req.file,
+    req.user?.userId
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User updated successfully!!!",
+    data: result,
+  });
+});
+
 //
 export const userController = {
   getUsers,
+  getLoggedInUser,
+  updateUser,
 };

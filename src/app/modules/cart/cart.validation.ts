@@ -20,7 +20,7 @@ const addItemToCart = z.object({
 // ! for adding cart item quantity
 const addCartItemQuantity = z.object({
   body: z.object({
-    productId: z.string().min(1, "User is required"),
+    productId: z.string().min(1, "product is required"),
     quantity: z.number().nonnegative("product quantity is required"),
   }),
 });

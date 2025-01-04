@@ -43,6 +43,18 @@ const getAllProducts = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all recent
+const getRecentProducts = catchAsync(async (req, res) => {
+  const result = await productServices.getRecentProducts(req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Recent Product retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting single products
 const getSingleProducts = catchAsync(async (req, res) => {
   const result = await productServices.getSingleProduct(req.params?.id);
@@ -74,4 +86,5 @@ export const productController = {
   getSingleProducts,
   updateProduct,
   deleteSingleProduct,
+  getRecentProducts,
 };

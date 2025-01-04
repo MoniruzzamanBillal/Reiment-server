@@ -56,7 +56,7 @@ const updateProduct = async (
 const getAllProducts = async (query: Record<string, unknown>) => {
   console.log("query from all products = ", query);
 
-  const { limit, page, price, searchTerm } = query;
+  const { limit, page, price, searchTerm, sortBy } = query;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const params: any = {};
@@ -72,7 +72,7 @@ const getAllProducts = async (query: Record<string, unknown>) => {
     ];
   }
 
-  console.log(params);
+  const sortValue = sortBy === "asc" ? 1 : -1;
 
   const limitValue = limit ? parseInt(limit as string) : 0;
   const pageValue = page ? parseInt(page as string) : 0;
@@ -81,7 +81,15 @@ const getAllProducts = async (query: Record<string, unknown>) => {
   const result = await productModel
     .find(params)
     .limit(limitValue)
-    .skip(limitValue && pageValue ? skipValue : 0);
+    .skip(limitValue && pageValue ? skipValue : 0)
+    .sort({ price: sortValue });
+
+  return result;
+};
+
+// ! for getting all recent product
+const getRecentProducts = async (payload: string[]) => {
+  const result = await productModel.find({ _id: { $in: payload } });
 
   return result;
 };
@@ -112,4 +120,5 @@ export const productServices = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  getRecentProducts,
 };
