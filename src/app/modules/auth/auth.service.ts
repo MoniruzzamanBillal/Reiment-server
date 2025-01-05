@@ -5,24 +5,15 @@ import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
 import { sendEmail } from "../../util/sendEmail";
-import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { Tlogin, TUser } from "../User/user.interface";
 import { userModel } from "../User/user.model";
 import { createToken } from "./auth.util";
 
 // ! create user in database
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const createUserIntoDB = async (payload: Partial<TUser>, file: any) => {
-  const name = payload?.name;
-  const path = file?.path;
 
-  const userImgresult = await SendImageCloudinary(path, name as string);
-
-  const userImg = userImgresult?.secure_url;
-
+const createUserIntoDB = async (payload: Partial<TUser>) => {
   const result = await userModel.create({
     ...payload,
-    profilePicture: userImg,
   });
 
   return result;
