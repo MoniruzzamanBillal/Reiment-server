@@ -354,7 +354,7 @@ const getAllOrder = async () => {
       path: "payment",
       select: " -createdAt -updatedAt -userId -orderId -__v ",
     })
-    .sort({ status: "pending" === "pending" ? -1 : 1 });
+    .sort({ status: orderStatus?.pending ? -1 : 1 });
 
   return result;
 };
@@ -380,6 +380,27 @@ const getSingleOrder = async (id: string) => {
   return orderData;
 };
 
+// ! for getring all user order
+const getUserOrder = async (userId: string) => {
+  const result = await orderModel
+    .find({ user: userId })
+    .populate({
+      path: "user",
+      select: " -userRole -status -createdAt -updatedAt -password -isDeleted ",
+    })
+    .populate({
+      path: "orderItems.product",
+      select: " -createdAt -updatedAt  -isDeleted -stockQuantity ",
+    })
+    .populate({
+      path: "payment",
+      select: " -createdAt -updatedAt -userId -orderId -__v ",
+    })
+    .sort({ status: orderStatus?.pending ? -1 : 1 });
+
+  return result;
+};
+
 //
 export const orderServices = {
   directOrderItem,
@@ -388,4 +409,5 @@ export const orderServices = {
   getAllOrder,
   cancelOrder,
   getSingleOrder,
+  getUserOrder,
 };

@@ -8,6 +8,13 @@ const router = Router();
 // ! for getting all order data
 router.get("/all-order", orderController.getAllOrder);
 
+// ! for getting user order data
+router.get(
+  "/user-order",
+  validateUser(UserRole.user),
+  orderController.getUserOrder
+);
+
 // ! for direct order item
 router.post(
   "/direct-order",

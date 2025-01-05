@@ -6,7 +6,7 @@ const redirectURL = "http://localhost:5173";
 
 // ! for verify payment
 const verifyPayment = catchAsync(async (req, res) => {
-  const { transactionId, userId } = req.query;
+  const { transactionId } = req.query;
 
   const result = await paymentServices.verifyPayment(transactionId as string);
 
@@ -15,7 +15,7 @@ const verifyPayment = catchAsync(async (req, res) => {
   }
 
   if (result) {
-    return res.redirect(`${redirectURL}/payment-confirm/${userId}`);
+    return res.redirect(`${redirectURL}/order-success`);
   } else {
     throw new Error("Payment unsuccessfull");
   }

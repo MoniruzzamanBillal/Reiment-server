@@ -43,6 +43,20 @@ const getAllOrder = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting user order data
+const getUserOrder = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+
+  const result = await orderServices.getUserOrder(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Order retrived successfully !!!",
+    data: result,
+  });
+});
+
 // ! for getting single order data
 const getSingleOrder = catchAsync(async (req, res) => {
   const result = await orderServices.getSingleOrder(req.params?.id);
@@ -87,4 +101,5 @@ export const orderController = {
   getSingleOrder,
   approveOrder,
   cancelOrder,
+  getUserOrder,
 };
