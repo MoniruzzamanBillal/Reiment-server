@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import httpStatus from "http-status";
 import config from "../../config";
 import AppError from "../../Error/AppError";
+import { sendEmail } from "../../util/sendEmail";
 import { SendImageCloudinary } from "../../util/SendImageCloudinary";
 import { Tlogin, TUser } from "../User/user.interface";
 import { userModel } from "../User/user.model";
@@ -65,8 +66,76 @@ const signInFromDb = async (payload: Tlogin) => {
   //
 };
 
+// ! send mail for reseting password
+const resetMailLink = async (email: string) => {
+  const userData = await userModel.findOne({ email: email });
+
+  if (!userData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User don't exist !!");
+  }
+
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User is deleted !!");
+  }
+
+  const userId = userData?._id.toHexString();
+  const userRole = userData?.userRole;
+
+  const jwtPayload = {
+    userId,
+    userRole,
+    name: userData?.email,
+  };
+
+  const token = createToken(jwtPayload, config.jwt_secret as string, "5m");
+
+  const resetLink = `http://localhost:5173/reset-password/${token}`;
+
+  const sendMailResponse = await sendEmail(resetLink, email);
+
+  return sendMailResponse;
+};
+
+// ! for reseting password
+const resetPasswordFromDb = async (payload: {
+  userId: string;
+  password: string;
+}) => {
+  const { userId, password } = payload;
+
+  console.log(userId);
+  console.log(password);
+  console.log(payload);
+
+  // ! check if  user exist
+  const userData = await userModel.findById(userId);
+
+  if (!userData) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User dont exist !!! ");
+  }
+
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User is deleted !!");
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    password,
+    Number(config.bcrypt_salt_rounds)
+  );
+
+  await userModel.findByIdAndUpdate(
+    userId,
+    { password: hashedPassword },
+    { new: true }
+  );
+
+  return null;
+};
+
 //
 export const authServices = {
   createUserIntoDB,
   signInFromDb,
+  resetMailLink,
+  resetPasswordFromDb,
 };

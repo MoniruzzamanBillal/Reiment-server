@@ -26,5 +26,11 @@ router.post(
   authController.signIn
 );
 
+// ! for sending reset link to email
+router.patch("/reset-link/:email", authController.sendResetLink);
+
+// ! for reseting password
+router.patch("/reset-password", authController.resetPassWord);
+
 //
 export const authRouter = router;

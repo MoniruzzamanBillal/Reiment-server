@@ -8,18 +8,18 @@ export const sendEmail = async (
   const transporter = nodemailer.createTransport({
     host: config.nodemailer_host,
     port: 587,
-    secure: false, // Use `true` for port 465, `false` for all other ports
+    secure: false,
     auth: {
-      user: config.nodemailer_sender,
-      pass: config.nodemailer_password,
+      user: "mdmoniruzzamanbillal2@gmail.com",
+      pass: "ilmf eeqw agtp mibf",
     },
   });
 
   const response = await transporter.sendMail({
-    from: config.nodemailer_sender, // sender address
-    to: receiverMail, // list of receivers
+    from: config.nodemailer_sender,
+    to: receiverMail,
     subject: "Reset your password within 5 mins!",
-    text: "", // plain text body
+    text: "",
     html: resetPasswordLink,
   });
 

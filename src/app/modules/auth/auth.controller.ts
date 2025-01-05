@@ -43,8 +43,35 @@ const signIn = catchAsync(async (req, res) => {
   });
 });
 
+// ! for reseting password
+const resetPassWord = catchAsync(async (req, res) => {
+  console.log(req.body);
+  await authServices.resetPasswordFromDb(req?.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password reset successfully  ",
+    data: { message: "success" },
+  });
+});
+
+// !send reset link to mail
+const sendResetLink = catchAsync(async (req, res) => {
+  const result = await authServices.resetMailLink(req?.params?.email);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Reset email sent successfully  ",
+    data: result,
+  });
+});
+
 //
 export const authController = {
   createUser,
   signIn,
+  sendResetLink,
+  resetPassWord,
 };
