@@ -10,5 +10,5 @@ export type TerrorMessages = {
 export type TgenericResponse = {
   statusCode: number;
   message: string;
-  errorMessages: TerrorMessages;
+  errorSources: TerrorMessages;
 };

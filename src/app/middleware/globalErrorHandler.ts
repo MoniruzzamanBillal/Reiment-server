@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ErrorRequestHandler } from "express";
-import { TerrorSource } from "../interface/error";
 import { handleCastError } from "../Error/handleCatError";
 import config from "../config";
+import { TerrorSource } from "../interface/error";
 
 const globalErrorHandler: ErrorRequestHandler = async (
   error,

@@ -1,9 +1,9 @@
+import httpStatus from "http-status";
 import { ZodError } from "zod";
 import { TerrorMessages, TgenericResponse } from "../interface/error";
-import httpStatus from "http-status";
 
 export const handleZodError = (error: ZodError): TgenericResponse => {
-  const errorMessages: TerrorMessages = error?.issues?.map((issue) => {
+  const errorSources: TerrorMessages = error?.issues?.map((issue) => {
     return {
       path: issue?.path[issue.path.length - 1],
       message: issue?.message,
@@ -15,6 +15,6 @@ export const handleZodError = (error: ZodError): TgenericResponse => {
   return {
     statusCode,
     message: error?.message,
-    errorMessages,
+    errorSources,
   };
 };

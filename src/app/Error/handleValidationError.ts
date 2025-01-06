@@ -5,7 +5,7 @@ import { TerrorMessages, TgenericResponse } from "../interface/error";
 export const handleValidationError = (
   error: mongoose.Error.ValidationError
 ): TgenericResponse => {
-  const errorMessages: TerrorMessages = Object.values(error?.errors).map(
+  const errorSources: TerrorMessages = Object.values(error?.errors).map(
     (value) => {
       return {
         path: value?.path,
@@ -19,6 +19,6 @@ export const handleValidationError = (
   return {
     statusCode,
     message: "mongoose ValidationError",
-    errorMessages,
+    errorSources,
   };
 };

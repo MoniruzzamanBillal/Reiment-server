@@ -8,7 +8,7 @@ export const handleDuplicateError = (error: any): TgenericResponse => {
 
   const extractedMessage = match && match[1];
 
-  const errorMessages: TerrorMessages = [
+  const errorSources: TerrorMessages = [
     {
       path: "",
       message: `${extractedMessage} is already exist`,
@@ -20,6 +20,6 @@ export const handleDuplicateError = (error: any): TgenericResponse => {
   return {
     statusCode,
     message: error?.message,
-    errorMessages,
+    errorSources,
   };
 };
