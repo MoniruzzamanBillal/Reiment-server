@@ -175,8 +175,6 @@ const orderFromCart = async (payload: TCartOrder, userId: string) => {
 
   // * for checking product exists and order quantity exceeds
   for (const product of userCartData!.cartItems || []) {
-    console.log(product);
-
     const productData = await checkDataExist(
       productModel,
       product?.product,
@@ -249,9 +247,9 @@ const orderFromCart = async (payload: TCartOrder, userId: string) => {
 
     // * removing cart data
     await cartModel.findOneAndUpdate(
-      { user: userId },
+      { user: userId, isDeleted: false },
       { isDeleted: true },
-      { session }
+      { session, new: true }
     );
 
     // * initiate payment

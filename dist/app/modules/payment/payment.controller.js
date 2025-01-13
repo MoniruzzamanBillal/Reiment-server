@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentController = void 0;
 const catchAsync_1 = __importDefault(require("../../util/catchAsync"));
 const payment_service_1 = require("./payment.service");
-const redirectURL = "http://localhost:5173";
-// const redirectURL = "https://techwisdom.vercel.app";
+// const redirectURL = "http://localhost:5173";
+const redirectURL = "https://reiment.vercel.app";
 // ! for verify payment
 const verifyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { transactionId } = req.query;

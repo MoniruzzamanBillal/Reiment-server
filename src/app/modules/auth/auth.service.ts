@@ -81,6 +81,7 @@ const resetMailLink = async (email: string) => {
   const token = createToken(jwtPayload, config.jwt_secret as string, "5m");
 
   const resetLink = `http://localhost:5173/reset-password/${token}`;
+  // const resetLink = `https://reiment.vercel.app/reset-password/${token}`;
 
   const sendMailResponse = await sendEmail(resetLink, email);
 
@@ -93,10 +94,6 @@ const resetPasswordFromDb = async (payload: {
   password: string;
 }) => {
   const { userId, password } = payload;
-
-  console.log(userId);
-  console.log(password);
-  console.log(payload);
 
   // ! check if  user exist
   const userData = await userModel.findById(userId);

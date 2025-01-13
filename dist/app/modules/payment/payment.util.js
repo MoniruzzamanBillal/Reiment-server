@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyPay = exports.initiatePayment = void 0;
 const axios_1 = __importDefault(require("axios"));
 const config_1 = __importDefault(require("../../config"));
-const redirectLink = "http://localhost:5000/api";
-const cancelUrl = "http://localhost:5173/";
+// const redirectLink = "http://localhost:5000/api";
+const redirectLink = "https://reiment-backend.vercel.app/api";
+// const cancelUrl = "http://localhost:5173/";
+const cancelUrl = "https://reiment.vercel.app/";
 const initiatePayment = (paymentData) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield axios_1.default.post(process.env.PAYMENT_URL, {
         tran_id: `${paymentData.transactionId}`,

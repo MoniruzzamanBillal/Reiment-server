@@ -2,7 +2,7 @@ import catchAsync from "../../util/catchAsync";
 import { paymentServices } from "./payment.service";
 
 const redirectURL = "http://localhost:5173";
-// const redirectURL = "https://techwisdom.vercel.app";
+// const redirectURL = "https://reiment.vercel.app";
 
 // ! for verify payment
 const verifyPayment = catchAsync(async (req, res) => {

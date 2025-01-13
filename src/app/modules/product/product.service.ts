@@ -54,8 +54,6 @@ const updateProduct = async (
 
 // ! for getting all products
 const getAllProducts = async (query: Record<string, unknown>) => {
-  console.log("query from all products = ", query);
-
   const { limit, page, price, searchTerm, sortBy } = query;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
