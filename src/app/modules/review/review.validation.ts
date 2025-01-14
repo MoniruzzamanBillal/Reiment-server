@@ -4,7 +4,6 @@ const addReviewSchema = z.object({
   body: z.object({
     userId: z.string().min(1, "User id is required !!!"),
     productId: z.string().min(1, "product id is required !!!"),
-    purchaseId: z.string().min(1, "purchase  id is required !!!"),
     comment: z.string().min(2, "comment is required !!!"),
     rating: z
       .number()

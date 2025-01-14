@@ -17,6 +17,10 @@ const orderItemSchema = new Schema<TOrderItem>({
     type: Number,
     required: [true, "Product price is required !!"],
   },
+  isReviewed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const orderSchema = new Schema<Toder>(

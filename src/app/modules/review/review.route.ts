@@ -15,5 +15,12 @@ router.post(
   reviewController.giveReview
 );
 
+// ! for checking review eligibility
+router.post(
+  "/check-review-eligible",
+  validateUser(UserRole.user),
+  reviewController.checkReviewEligibility
+);
+
 //
 export const reviewRouter = router;

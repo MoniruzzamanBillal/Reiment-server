@@ -5,14 +5,12 @@ const reviewSchema = new Schema<TReview>(
   {
     userId: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "User is required "],
     },
     productId: {
       type: Schema.Types.ObjectId,
-      required: [true, "User is required "],
-    },
-    purchaseId: {
-      type: Schema.Types.ObjectId,
+      ref: "Product",
       required: [true, "User is required "],
     },
     rating: {
@@ -29,18 +27,13 @@ const reviewSchema = new Schema<TReview>(
   { timestamps: true }
 );
 
-reviewSchema.index(
-  { userId: 1, productId: 1, purchaseId: 1 },
-  { unique: true }
-);
-
 reviewSchema.pre("find", async function (next) {
-  this.find({ isDeleted: { $ne: false } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 
 reviewSchema.pre("findOne", async function (next) {
-  this.find({ isDeleted: { $ne: false } });
+  this.find({ isDeleted: { $ne: true } });
   next();
 });
 

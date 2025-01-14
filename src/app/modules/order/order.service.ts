@@ -327,6 +327,7 @@ const cancelOrder = async (id: string) => {
     await session.endSession();
 
     return modifiedData;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();

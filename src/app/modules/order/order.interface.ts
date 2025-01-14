@@ -2,9 +2,11 @@ import { Types } from "mongoose";
 import { deliveryStatus, orderStatus } from "./order.constant";
 
 export type TOrderItem = {
+  _id?: string;
   product: Types.ObjectId;
   quantity: number;
   price: number;
+  isReviewed?: boolean;
 };
 
 export type Tdelivery = {
@@ -18,6 +20,7 @@ export type Toder = {
   address: Types.ObjectId;
   totalAmount: number;
   isDeleted: boolean;
+  isReviewed: boolean;
   orderStatus: keyof typeof orderStatus;
   orderItems: TOrderItem[];
   delivery: Tdelivery;
