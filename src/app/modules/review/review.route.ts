@@ -15,9 +15,12 @@ router.post(
   reviewController.giveReview
 );
 
+// ! for getting product review
+router.get("/product-review/:id", reviewController.getProductReview);
+
 // ! for checking review eligibility
-router.post(
-  "/check-review-eligible",
+router.get(
+  "/check-review-eligible/:id",
   validateUser(UserRole.user),
   reviewController.checkReviewEligibility
 );

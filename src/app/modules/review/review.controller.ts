@@ -18,7 +18,7 @@ const giveReview = catchAsync(async (req, res) => {
 // ! for checkint eligibility of the review
 const checkReviewEligibility = catchAsync(async (req, res) => {
   const result = await reviewServices.checkReviewEligibility(
-    req.body?.productId,
+    req?.params?.id,
     req.user?.userId
   );
 
@@ -30,8 +30,34 @@ const checkReviewEligibility = catchAsync(async (req, res) => {
   });
 });
 
+// ! for getting all review
+const getAllReview = catchAsync(async (req, res) => {
+  const result = await reviewServices.getAllReview();
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Review retrived successfully !!!",
+    data: result,
+  });
+});
+
+// ! for getting product review
+const getProductReview = catchAsync(async (req, res) => {
+  const result = await reviewServices.getProductReview(req?.params?.id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Product Review retrived successfully !!!",
+    data: result,
+  });
+});
+
 //
 export const reviewController = {
   giveReview,
   checkReviewEligibility,
+  getAllReview,
+  getProductReview,
 };

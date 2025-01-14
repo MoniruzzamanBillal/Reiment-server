@@ -23,7 +23,10 @@ const addReview = async (payload: TReview) => {
   const orderData = await orderModel.findOne({
     user: userId,
     "orderItems.product": productId,
+    "orderItems.isReviewed": false,
   });
+
+  console.log(orderData);
 
   const orderItem = orderData?.orderItems?.find(
     (item) => item?.product?.toString() === productId && !item?.isReviewed
@@ -67,6 +70,7 @@ const checkReviewEligibility = async (productId: string, userId: string) => {
   const orderData = await orderModel.findOne({
     user: userId,
     "orderItems.product": productId,
+    "orderItems.isReviewed": false,
   });
 
   const orderItem = orderData?.orderItems?.find(
@@ -89,10 +93,17 @@ const getUserReview = async (userId: string) => {
   return result;
 };
 
+// ! for getting product review
+const getProductReview = async (productId: string) => {
+  const result = await reviewModel.find({ productId }).populate("userId");
+  return result;
+};
+
 //
 export const reviewServices = {
   addReview,
   getAllReview,
   getUserReview,
   checkReviewEligibility,
+  getProductReview,
 };
