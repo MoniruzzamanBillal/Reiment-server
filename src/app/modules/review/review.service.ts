@@ -65,6 +65,23 @@ const addReview = async (payload: TReview) => {
   }
 };
 
+// ! for updating review
+const updateReview = async (payload: {
+  reviewId: string;
+  comment: string;
+  rating: number;
+}) => {
+  const { reviewId, comment, rating } = payload;
+
+  const updateResult = await reviewModel.findByIdAndUpdate(
+    reviewId,
+    { comment, rating },
+    { new: true }
+  );
+
+  return updateResult;
+};
+
 // ! check review eligibility
 const checkReviewEligibility = async (productId: string, userId: string) => {
   const orderData = await orderModel.findOne({
@@ -106,4 +123,5 @@ export const reviewServices = {
   getUserReview,
   checkReviewEligibility,
   getProductReview,
+  updateReview,
 };

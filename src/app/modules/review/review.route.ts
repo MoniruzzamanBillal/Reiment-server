@@ -15,6 +15,13 @@ router.post(
   reviewController.giveReview
 );
 
+// ! for updating review
+router.patch(
+  "/update-review",
+  validateUser(UserRole.user),
+  reviewController.updateProductReview
+);
+
 // ! for getting product review
 router.get("/product-review/:id", reviewController.getProductReview);
 

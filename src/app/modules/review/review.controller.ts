@@ -15,6 +15,18 @@ const giveReview = catchAsync(async (req, res) => {
   });
 });
 
+// ! for updating product review
+const updateProductReview = catchAsync(async (req, res) => {
+  const result = await reviewServices.updateReview(req?.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Product Review updated successfully !!!",
+    data: result,
+  });
+});
+
 // ! for checkint eligibility of the review
 const checkReviewEligibility = catchAsync(async (req, res) => {
   const result = await reviewServices.checkReviewEligibility(
@@ -60,4 +72,5 @@ export const reviewController = {
   checkReviewEligibility,
   getAllReview,
   getProductReview,
+  updateProductReview,
 };
